@@ -20,12 +20,18 @@ version: 1.0.0
 
 ### 지시사항 (가이드라인)
 1. 프롬프트 로직에 따라 Level 1(기초), Level 2(심화), Level 3(종합)의 3문항 세트를 설계한다.
-2. 예시 답안과 채점 기준을 한 문서 안에 모두 통합하여 마크다운을 작성한다.
+2. 학생용 문제부(모범 답안 제외)와 교사용 정답부(답안 및 채점 기준)를 각각 분리하여 2개의 마크다운 텍스트 블록으로 생성한다.
 
 ## 에이전트 행동 수칙
 1. 파일 경로를 읽어 지문 텍스트를 추출한다.
-2. `templates/differentiated_prompt.j2`의 지시사항을 정확히 준수하여 마크다운 포맷으로 출제 데이터를 생성한다.
-3. **결과물 저장**: 파일 쓰기 도구를 사용하여 `projects/eng-essay-qgen/output/essay-questions/` 폴더 내에 `YYYYMMDD_HHMMSS-diff-키워드.md` 형태의 파일로 저장한다. (예: `20260801_130000-diff-climate_change.md`)
-4. 파일 저장이 완료되면, `tools/exam-pdf`를 사용하여 PDF로 변환한다.
-   - 실행 명령어: `python3 tools/exam-pdf/make_exam_pdf.py [저장된_마크다운_경로] --title "수준별 영어 서술형 평가" --subtitle "[학년] 대비"`
-5. PDF 변환까지 완료되면 사용자에게 "수준별 3종 세트 문항이 생성되어 [파일명] 경로에 저장되었습니다."라고 보고한다.
+2. `templates/differentiated_prompt.j2`의 지시사항을 준수하여 2개의 마크다운(문제지, 지도안) 내용을 생성한다.
+3. **학생용 문제지 저장**: 학생용 마크다운 내용을 `output/essay-questions/` 폴더 내에 `YYYYMMDD_HHMMSS-diff-키워드.md` 파일로 저장한다.
+4. **교사용 지도안 저장**: 정답이 포함된 교사용 마크다운을 `output/lesson-plans/` 폴더 내에 `YYYYMMDD_HHMMSS-diff-키워드_lesson.md` 파일로 저장한다.
+5. **품질/보안 검수 강제**: 두 파일이 저장된 직후, 각 파일에 대해 `/essay-review` 스킬을 호출하여 검증한다.
+   - 학생용: 모범 답안 유출(Format Security)이 없는지 검증.
+   - 교사용: 모범 답안과 채점 기준이 누락 없이 완벽한지 검증.
+   - Fail 판정이 나올 경우 지적 사항을 반영하여 파일을 수정한 뒤 덮어쓴다.
+6. **PDF 렌더링**: 검수를 모두 통과한 후, 두 파일 각각에 대해 `tools/exam-pdf/make_exam_pdf.py`를 호출하여 PDF로 변환한다.
+   - 학생용: `python3 tools/exam-pdf/make_exam_pdf.py [학생용_경로] --title "수준별 영어 서술형 평가" --subtitle "[학년] 대비"`
+   - 교사용: `python3 tools/exam-pdf/make_exam_pdf.py [교사용_경로] --title "수준별 서술형 교사용 지도안" --subtitle "[학년] 대비"`
+7. 모든 변환이 완료되면 사용자에게 두 파일의 경로를 보고한다.
