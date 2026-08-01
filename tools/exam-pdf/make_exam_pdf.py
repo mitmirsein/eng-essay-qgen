@@ -78,6 +78,10 @@ def clean(md: str) -> str:
     md = md.lstrip('\n')
     md = re.sub(r'^-{3,}\s*\n', '', md, count=1)         # drop redundant leading ---
 
+    # Linting: GitHub Alerts 및 HTML 태그 치환
+    md = re.sub(r'>\s*\[!(?:NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(.*)', r'> **\1**', md, flags=re.IGNORECASE)
+    md = md.replace('<조건>', '[조건]')
+
     lines = collapse_matrices(md.split('\n'))
     out = []
     for line in lines:
