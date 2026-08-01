@@ -86,10 +86,10 @@ brew install poppler               # (선택) pdfinfo 명령어를 통한 페이
 
 ## 🙏 Acknowledgements
 본 프로젝트의 기초적인 아이디어 및 영감은 다음 포스트에서 착안하였습니다:
-- [Threads 포스트](https://www.threads.com/share/FukWvhRP9/)
+- <a href="https://www.threads.com/share/FukWvhRP9/" target="_blank">Threads 포스트</a>
 
 본 프로젝트의 중등 교육과정 성취기준 및 메타 지식은 다음 레포지토리를 참고하여 설계되었습니다:
-- [DECK6/korean-secondary-learning-map](https://github.com/DECK6/korean-secondary-learning-map)
+- <a href="https://github.com/DECK6/korean-secondary-learning-map" target="_blank">DECK6/korean-secondary-learning-map</a>
 
 ---
 
