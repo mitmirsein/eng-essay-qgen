@@ -1,0 +1,3 @@
+(A) The rapid advancement of artificial intelligence brings huge benefits, such as automating tedious tasks and solving complex medical problems. However, it also raises significant ethical concerns. One major issue is the potential for bias in algorithms, which can lead to unfair treatment of certain groups.
+
+(B) Another critical ethical challenge is the loss of privacy. As AI systems collect and analyze vast amounts of personal data to improve their accuracy, individuals often lose control over their own information. To prevent these problems, strict regulations and ethical guidelines must be established before deploying such technologies widely.
