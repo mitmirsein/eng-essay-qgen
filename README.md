@@ -72,6 +72,8 @@ brew install poppler               # (선택) pdfinfo 명령어를 통한 페이
   - `question_prompt.j2`: 적응형 출제 엔진의 핵심인 프롬프트 템플릿 (중고등 성취기준 메타 지식 포함)
 - `passages/`: 원문 지문 텍스트 저장소 (`.txt`)
   - `snow_white.txt`, `white_lie.txt` 등 샘플 지문 포함
+- `input/`: 외부 투입 파일 저장소
+  - `answer-sheets/`: 자동 채점을 위한 학생 답안지 이미지(`.jpg`, `.png` 등) 보관 폴더
 - `output/`: 생성 결과물 격리 저장소
   - `essay-questions/`: 서술형 문제지 마크다운 및 PDF (`.md`, `.pdf`)
   - `lesson-plans/`: 교안 및 모범 답안 마크다운 및 PDF (`.md`, `.pdf`)
