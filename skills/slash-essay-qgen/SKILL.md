@@ -1,56 +1,45 @@
 ---
 name: slash-essay-qgen
-description: 중고등부 영어 서술형 문제 출제 (조건부 1문단 쓰기) 워크플로우를 실행합니다.
-status: active
-version: 1.0.0
+description: 지문과 학년을 분석해 적응형 영어 서술형 assessment package를 생성하고 결정론적 검증까지 수행합니다.
 ---
 
 # /essay-qgen 워크플로우
 
-이 스킬은 중고등학생을 위한 고품질 영어 서술형(에세이) 문제와 모범 답안, 채점 기준을 자동 생성하고 최종적으로 2단 시험지 형태의 PDF로 변환하는 프롬프트 워크플로우입니다.
+`/essay-qgen <지문_파일_경로> [type1|type2|type3] [학년]`을 실행한다. `고2`와 `고3`은
+`고2/3`으로 정규화한다.
 
-## 사용법
-`/essay-qgen <지문_파일_경로> [type1|type2|type3] [학년]`
-- `type1` (기본값): 단일 지문, 문학/추론/인물 분석 중심 출제 방향성
-- `type2`: 복수 지문, 비문학/요약/종합 분석 중심 출제 방향성
-- `type3`: 실용문/의견 제시 중심, 고민 상담 및 찬반 논쟁에 대한 조언/해결책 영작 방향성
-- `[학년]`: (옵션) 중1, 중2, 중3, 고1, 고2/3 등 대상 학년. 명시되지 않으면 "중고등부"로 간주되어 지문 난이도를 스스로 판별.
-*(※ 세부 어휘 수, 필수 문법 등의 조건은 고정되지 않고 학년과 지문 내용에 맞춰 적응형으로 자동 설계됩니다.)*
+## 처리 순서
 
-## 실행 단계 (프롬프트 엔진)
+1. 지문 파일을 UTF-8로 읽고 유형, 문단 구조, 정보량, 어휘·문장 난이도를 확인한다.
+2. `templates/question_prompt.j2`를 사용해 assessment JSON을 생성한다. 조건은 지문과
+   학년에 맞춰 3~4개를 적응형으로 설계하며, 인용·상징·특정 문법을 지문 근거 없이 강제하지 않는다.
+3. JSON의 단일 원본을 `output/lesson-plans/_packages/<assessment-id>/assessment.json`에
+   저장한다. 저장 시 `save_assessment`로 schema 검증을 통과시키고 기존 파일은 명시적
+   overwrite 없이는 덮어쓰지 않는다.
+4. 다음 결정론적 검증을 통과시킨다.
 
-사용자가 `/essay-qgen`을 호출하면, 입력받은 지문 텍스트를 읽은 후 아래의 **프롬프트 템플릿**을 적용하여 출력물(문제, 예시 답안, 채점 기준)을 생성하고 터미널이나 마크다운 파일로 저장합니다.
+   ```bash
+   uv run python scripts/validate_assessment.py \
+     output/lesson-plans/_packages/<assessment-id>/assessment.json
+   ```
 
-### 프롬프트 지시사항
-너는 중고등부 영어 교육 전문가이자 서술형 문제 출제 위원이야. 제공된 영어 지문을 읽고, 아래의 **출제 형식**과 **평가 요소**를 충족하는 고품질 서술형 문제를 출제해 줘.
+   단어 수, 표면 패턴, 필수 문자열, 5-gram 복사, 형식, rubric 합계, 조건 연결, 모든
+   deterministic 모범답안을 확인하고 semantic/manual 항목은 검수 대기 상태로 남긴다.
+5. `scripts/render_package.py`로 학생용과 교사용 Markdown을 각각 렌더한다. 학생용에는
+   조건·지시문·지문만 전달하며 루브릭과 답안은 전달하지 않는다.
 
-**[평가 요소 (Conditions)]**
-반드시 다음 3가지 조건이 포함되도록 문제를 설계할 것:
-1. **인용 (Citation)**: 지문에서 특정 상황이나 행동을 묘사하는 부분을 5단어 이상 인용하여 영어로 서술할 것.
-2. **추론 (Inference & Symbolism)**: 해당 상황이 발생한 이유나 특정 사물/인물의 상징적 의미를 포함하여 영어로 서술할 것.
-3. **창의적 사고 (Creative Thinking)**: 대상의 특성(예: 거울의 반사성 등)과 상징을 연결하여 자신의 생각을 영어로 서술할 것.
+   ```bash
+   uv run python scripts/render_package.py \
+     output/lesson-plans/_packages/<assessment-id>/assessment.json \
+     --target all --output output/lesson-plans/_packages/<assessment-id>/rendered
+   ```
 
-**[출제 형식 (Output Format)]**
-```markdown
-## 📝 영어 서술형 평가
+6. `manifest.json`과 `qa-report.json`을 확인한다. PDF가 필요하면 학생용은 `--profile exam`,
+   교사용은 `--profile teacher`로 만든다. PDF 실패는 성공으로 간주하지 않는다.
 
-**다음 이야기를 읽고 <조건>을 충족하는 글을 완성된 1문단으로 서술하시오. [8점, 부분 점수 있음]**
+## 출력 보안
 
-> [!NOTE] 지문 (Reading Passage)
-> (여기에 입력받은 영어 지문 전문을 삽입하세요.)
-
-### 📌 <조건>
-1. (등장 인물/사물)이 (특정 인물/상황)과 관련하여 어떤 행동을 하고 있는지 이야기에서 5단어 이상 인용하여 영어로 서술할 것.
-2. (해당 행동의 이유)를 (등장 인물/사물)이 가지는 상징의 의미를 포함하여 영어로 서술할 것.
-3. (등장 인물/사물)의 어떤 특성 때문에 이러한 의미의 상징을 가지게 되었는지 자신의 생각을 영어로 서술할 것.
-```
-
-## 에이전트 행동 수칙
-1. 입력으로 파일 경로가 들어오면, 먼저 해당 파일을 읽어서 지문을 파악한다.
-2. 지문이 텍스트로 바로 들어오면 그대로 사용한다.
-3. 위 프롬프트 지시사항을 정확히 준수하여 마크다운 포맷으로 출제 데이터를 생성한다.
-4. **결과물 저장**: 생성된 결과물을 터미널에만 출력하지 말고, 반드시 파일 쓰기 도구(write_to_file 등)를 사용하여 `projects/eng-essay-qgen/output/essay-questions/` 폴더 내에 `YYYYMMDD_HHMMSS-type-주제.md` 형태의 파일로 저장한다. (예: `20260801_120100-type1-snow_white.md`)
-5. 난이도 파라미터(학년)가 제공된 경우, 예시 답안의 어휘 수준과 문법 복잡도를 조절한다.
-6. 출제 및 파일 저장이 완료되면, 프로젝트 내부의 `tools/exam-pdf`를 사용하여 2단 시험지 형태의 PDF로 변환한다.
-   - 실행 명령어: `python3 tools/exam-pdf/make_exam_pdf.py [저장된_마크다운_경로] --title "영어 서술형 평가" --subtitle "[학년] 대비"` (학년이 지정되지 않은 경우 "중고등부 대비")
-7. PDF 변환까지 완료되면 사용자에게 "문제가 생성되어 [파일명] 경로에 마크다운 및 PDF로 저장되었습니다."라고 보고한다.
+- 학생용 파일은 `output/essay-questions/` 또는 패키지의 `student.md`로만 배포한다.
+- 모범답안, 채점 기준, 배점표, `Rubric`, 내부 QA를 학생용 텍스트에 넣지 않는다.
+- 모범답안과 rubric은 private package 및 교사용 렌더에만 둔다.
+- 임시 생성물은 프로젝트 루트에 두지 않고 허용된 `output/` 하위 또는 `/tmp`에 둔다.

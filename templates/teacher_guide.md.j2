@@ -1,0 +1,197 @@
+# {{ title }} - 교사용 패키지
+
+## 평가 개요
+
+- 주제: {{ topic }}
+- 대상: {{ grade }}
+- 유형: {{ question_type }}
+
+## 지문
+
+{{ passage_text }}
+
+## 학생용 과제
+
+{{ instruction }}
+
+{% if levels %}
+{% for level in levels %}
+### {{ level.label }}
+
+{{ level.instruction }}
+
+#### 조건
+{% for condition in level.conditions %}
+- {{ condition.id }}: {{ condition.text }}
+{% endfor %}
+
+#### 채점 기준
+{% for rubric in level.rubric %}
+- {{ rubric.points }}점: {{ rubric.full_credit }}
+{% endfor %}
+
+#### 모범답안
+{% for answer in level.answers %}
+- {{ answer.level }}: {{ answer.text }}
+{% endfor %}
+
+{% endfor %}
+{% else %}
+## 조건
+
+{% for condition in conditions %}
+- {{ condition.id }}: {{ condition.text }}
+{% endfor %}
+
+## 채점 기준
+
+{% for rubric in rubric_items %}
+- {{ rubric.points }}점 ({{ rubric.condition_ids | join(', ') }}): {{ rubric.full_credit }}{% if rubric.partial_credit %} / 부분점수: {{ rubric.partial_credit }}{% endif %}
+{% endfor %}
+
+## 모범답안
+
+{% for answer in answers %}
+### {{ answer.level }}
+
+{{ answer.text }}
+{% if answer.rationale %}
+설명: {{ answer.rationale }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if lesson_plan %}
+## 수업 지도안
+
+{% set overview = lesson_plan.get('overview', {}) %}
+{% if overview %}
+### 수업 개요
+
+- 대상: {{ overview.get('grade', grade) }}
+- 수업 시간: {{ overview.get('duration_minutes', '-') }}분
+- 수업 모드: {{ overview.get('lesson_mode', '-') }}
+{% if overview.get('materials', []) %}
+- 준비물: {{ overview.get('materials', []) | join(', ') }}
+{% endif %}
+{% for objective in overview.get('objectives', []) %}
+- 목표: {{ objective }}
+{% endfor %}
+{% endif %}
+
+{% set standards = lesson_plan.get('standards', []) %}
+{% if standards %}
+### 교육과정 연계
+
+{% for standard in standards %}
+- {{ standard.get('code', '-') }}: {{ standard.get('statement_ko', '-') }}
+  - 수업 근거: {{ standard.get('lesson_evidence', '-') }}
+{% endfor %}
+{% endif %}
+
+{% set analysis = lesson_plan.get('passage_analysis', {}) %}
+{% if analysis %}
+### 지문 분석
+
+#### 전개
+{% for item in analysis.get('flow', []) %}
+- {{ item }}
+{% endfor %}
+
+#### 핵심 어휘
+{{ analysis.get('key_vocabulary', []) | join(', ') }}
+
+#### 목표 문법
+{{ analysis.get('target_grammar', []) | join(', ') }}
+
+{% if analysis.get('background_knowledge', []) %}
+#### 배경지식
+{% for item in analysis.get('background_knowledge', []) %}
+- {{ item }}
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% set sequence = lesson_plan.get('sequence', []) %}
+{% if sequence %}
+### 수업 진행
+
+{% for phase in sequence %}
+#### {{ phase.get('phase', '-') }} ({{ phase.get('minutes', '-') }}분)
+
+- 교사 활동: {{ phase.get('teacher_actions', []) | join('; ') }}
+- 학생 활동: {{ phase.get('student_actions', []) | join('; ') }}
+{% for question in phase.get('questions', []) %}
+- 질문: {{ question }}
+{% endfor %}
+{% for response in phase.get('expected_responses', []) %}
+- 예상 반응: {{ response }}
+{% endfor %}
+{% for check in phase.get('checks_for_understanding', []) %}
+- 확인: {{ check }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% set differentiation = lesson_plan.get('differentiation', {}) %}
+{% if differentiation %}
+### 수준별 지원
+
+{% for label, tier in [('support', '지원'), ('core', '기본'), ('extension', '확장')] %}
+{% set data = differentiation.get(label, {}) %}
+{% if data %}
+#### {{ tier }}
+{% for key, values in data.items() %}
+{% if values is iterable and values is not string %}
+- {{ key }}: {{ values | join('; ') }}
+{% else %}
+- {{ key }}: {{ values }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% set misconceptions = lesson_plan.get('misconceptions', []) %}
+{% if misconceptions %}
+### 예상 오개념과 대응
+
+{% for item in misconceptions %}
+#### {{ item.get('pattern', '-') }}
+- 진단 질문: {{ item.get('diagnostic_question', '-') }}
+- 교사 대응: {{ item.get('teacher_response', '-') }}
+- 미니 수업: {{ item.get('mini_lesson', '-') }}
+{% endfor %}
+{% endif %}
+
+{% set answer_planning = lesson_plan.get('answer_planning', {}) %}
+{% if answer_planning %}
+### 답안 지도 및 자기점검
+
+{% for item in answer_planning.get('condition_to_sentence_map', []) %}
+- 조건-문장 연결: {{ item }}
+{% endfor %}
+{% for item in answer_planning.get('self_checklist', []) %}
+- 자기점검: {{ item }}
+{% endfor %}
+{% endif %}
+
+{% set anchors = lesson_plan.get('scoring_anchors', []) %}
+{% if anchors %}
+### 점수 앵커
+
+{% for anchor in anchors %}
+- {{ anchor.get('score', '-') }}점{% if anchor.get('answer_id') %} ({{ anchor.get('answer_id') }}){% endif %}: {{ anchor.get('rationale_ko', '-') }}{% if anchor.get('text') %} / 예시: {{ anchor.get('text') }}{% endif %}
+{% endfor %}
+{% endif %}
+
+{% set formative = lesson_plan.get('formative_assessment', {}) %}
+{% if formative %}
+### 형성평가
+
+- 중간 확인: {{ formative.get('mid_lesson_check', '-') }}
+- 동료 점검: {{ formative.get('peer_checklist', []) | join('; ') }}
+- 출구 티켓: {{ formative.get('exit_ticket', '-') }}
+- 후속 활동: {{ formative.get('follow_up', '-') }}
+{% endif %}
+{% endif %}

@@ -1,0 +1,34 @@
+# macOS and editor metadata
+.DS_Store
+**/.DS_Store
+*.swp
+*.swo
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+*.egg-info/
+
+# Local teacher configuration
+config/teacher_profile.local.yaml
+
+# Student-specific grading and coaching artifacts
+# Keep curated example questions and lesson plans trackable.
+output/lesson-plans/*-grade-*.md
+output/lesson-plans/*-grade-*.pdf
+output/lesson-plans/*-coach-*.md
+output/lesson-plans/*-coach-*.pdf
+output/lesson-plans/grading/
+output/lesson-plans/coaching/
+output/lesson-plans/class-insights/
+output/lesson-plans/_packages/
+
+# Private batch and source-map data
+**/source_map.local.json
+**/approvals.json
+**/transcriptions.csv
+**/student_names.local.json

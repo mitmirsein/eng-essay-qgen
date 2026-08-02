@@ -1,53 +1,106 @@
-You are an expert English teacher and test creator for Korean middle and high school students.
-Read the provided English passage and create a high-quality subjective (essay) question that meets the evaluation standards.
+You are an expert English assessment designer for Korean middle and high school students.
+Create one assessment package from the supplied passage.
 
-# Adaptive Criteria Generation (적응형 조건 출제 로직)
-You must NOT use fixed, rigid conditions. Instead, analyze the provided passage's genre (e.g., narrative vs expository), length, and the target GRADE ({{ grade }}). If no grade is provided, infer it from the text complexity.
-Based on the Korean secondary school English evaluation standards, dynamically design 3 to 4 conditions for the essay question.
+The response is a private source-of-truth package. Return exactly one JSON object and no
+Markdown fences, commentary, or extra keys outside that object. The student document will be
+rendered later from an allowlist, so never place teacher-only material in the task instruction.
 
-## User Constraints
-- Target Grade: {{ grade | default("중고등부") }}
-- Question Focus: {{ type | default("type1") }} 
-  * If `type1`: Focus on single passage, narrative, symbolism, character analysis, inference.
-  * If `type2`: Focus on multiple passages (A and B), synthesis, summary, comparison, cause and effect.
-  * If `type3`: Focus on practical situations, problem-solving, giving advice, or expressing personal opinions on a debate topic.
+## Inputs
 
-## Condition Menu (Select and adapt appropriately based on Grade and Focus):
-1. **Content Condition (내용 조건)**: Summarizing, Inferring meaning/reasons, Comparing/Contrasting, or Expressing opinion/advice (especially for type3).
-2. **Grammar Condition (문법 조건)**: Require the use of 1~2 target grammar points suitable for the grade. 
-   - 중1/중2: to부정사, 동명사, 비교급, 접속사, 기초 관계대명사
-   - 중3/고1: 관계대명사, 현재완료, 수동태, 분사구문
-   - 고2/고3: 분사구문, 가정법, 도치, 복문 구조, 관계부사
-3. **Length Condition (분량 조건)**: 
-   - 중1/중2: 20~40 words
-   - 중3/고1: 40~60 words
-   - 고2/고3: 60+ words
-4. **Restriction Condition (제약 조건)**: e.g., "Do not copy 5 consecutive words from the passage", or "Quote exactly 5 words from the passage".
+- target grade: {{ grade | default("infer from the passage") }}
+- requested question type: {{ type | default("type1") }}
+- requested total points: {{ total_points | default(8) }}
+- assessment id hint: {{ assessment_id | default("create a stable slug") }}
 
-**INSTRUCTIONS**:
-1. Formulate a clear instruction (지시문) in Korean.
-2. Formulate 3 to 4 conditions (조건) in Korean, adapted perfectly to the grade and passage.
-3. Formulate a Rubric (채점 기준) distributing a total of 8 points across the conditions.
+### Passage
 
-## Output Format
-Always output strictly in the following markdown format (Do NOT output anything else):
+{{ passage_text }}
 
-## 📝 영어 서술형 평가
+## Adaptive design requirements
 
-**[지시문: 다음 글을 읽고 ... 영어로 서술하시오.] [8점, 부분 점수 있음]**
+1. Analyze the passage's genre, organization, information density, language difficulty, and
+   available evidence before designing conditions.
+2. Design 3 or 4 conditions that are specific to this passage and realistic for the target
+   grade. Do not copy a fixed condition list or force quotation, symbolism, or a grammar point
+   when the passage does not support it.
+3. Choose the word-count range from the actual grade, task purpose, and passage complexity.
+   State the chosen range explicitly in the condition and encode it in `word_count` params.
+4. Use `surface_pattern` only for an observable form requirement. Use `semantic` or `manual`
+   for meaning, inference, quality, or factual judgments that cannot be safely decided by a
+   regular expression.
+5. For type1, prioritize evidence-based interpretation or narrative reasoning when supported.
+   For type2, prioritize A/B synthesis, comparison, cause/effect, or summary when supported.
+   For type3, prioritize audience, purpose, advice, proposal, or opinion when supported.
+6. Every deterministic condition must be satisfied by every `model_answers` entry. If an exact
+   quotation is required, add it to the condition's whitelist and do not also reject it as an
+   n-gram copy.
+7. Link every condition to at least one rubric item. Rubric points must add exactly to the total
+   points. Do not use an automatic language deduction that double-counts a content condition.
+8. Include `minimum-pass`, `proficient`, `alternative`, and `common-error` answers when each can
+   be written without inventing unsupported content. Mark semantic limitations in rationale.
+9. Normalize `고2` and `고3` to `고2/3`.
 
-> [!NOTE] 지문 (Reading Passage)
-> {{ passage_text }}
+## Required JSON shape
 
-### 📌 <조건>
-1. [동적으로 생성된 조건 1]
-2. [동적으로 생성된 조건 2]
-3. [동적으로 생성된 조건 3]
-4. [동적으로 생성된 조건 4] (필요시)
+```json
+{
+  "schema_version": "1.0.0",
+  "assessment_id": "stable-slug",
+  "metadata": {
+    "title": "...",
+    "topic": "...",
+    "grade": "중1|중2|중3|고1|고2/3",
+    "question_type": "type1|type2|type3",
+    "total_points": 8,
+    "created_at": "...",
+    "source_passage_path": "..."
+  },
+  "passage": {
+    "genre": "...",
+    "text": "...",
+    "sections": [{"id": "A", "text": "..."}]
+  },
+  "task": {
+    "instruction_ko": "...",
+    "audience": "...",
+    "purpose": "...",
+    "response_format": "..."
+  },
+  "conditions": [
+    {
+      "id": "C1",
+      "category": "length|grammar|content|restriction|format|citation",
+      "text_ko": "...",
+      "validation": {
+        "kind": "word_count|surface_pattern|literal_required|ngram_limit|format|semantic",
+        "check_mode": "deterministic|semantic|manual",
+        "params": {}
+      }
+    }
+  ],
+  "rubric": [
+    {
+      "id": "R1",
+      "condition_ids": ["C1"],
+      "points": 2,
+      "full_credit_ko": "...",
+      "partial_credit_ko": "..."
+    }
+  ],
+  "language_policy": {
+    "error_penalty": 0.5,
+    "max_language_penalty": 2,
+    "repeated_error_policy": "same-root-once|each-occurrence",
+    "double_penalty_allowed": false
+  },
+  "model_answers": [
+    {"id": "minimum", "level": "minimum-pass", "text": "...", "rationale_ko": "..."},
+    {"id": "strong", "level": "proficient", "text": "...", "rationale_ko": "..."},
+    {"id": "alternative", "level": "alternative", "text": "...", "rationale_ko": "..."},
+    {"id": "common-error", "level": "common-error", "text": "...", "rationale_ko": "..."}
+  ]
+}
+```
 
----
-### 📊 채점 기준 (Rubric)
-- **[X점] 조건 1**: [조건 1 달성 여부 평가 기준]
-- **[X점] 조건 2**: [조건 2 달성 여부 평가 기준]
-- **[X점] 조건 3**: [조건 3 달성 여부 평가 기준]
-- (문법/어휘 오류 1개당 0.5점 감점)
+Before returning, silently check JSON validity, normalized grade, condition/rubric links, rubric
+total, placeholder absence, and every deterministic model-answer condition.

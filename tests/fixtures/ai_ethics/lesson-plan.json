@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0.0",
+  "assessment_id": "20260802_210000-type2-ai_ethics",
+  "overview": {
+    "grade": "고2/3",
+    "duration_minutes": 45,
+    "lesson_mode": "writing-workshop",
+    "materials": ["학생용 문제지", "A/B 정보 조직자", "자기점검표"],
+    "objectives": [
+      "학생은 두 지문의 윤리 문제를 각각 한 문장으로 요약한다.",
+      "학생은 관계대명사를 포함한 50~70단어 문단을 작성한다.",
+      "학생은 답안의 조건과 복사 제한을 자기점검한다."
+    ]
+  },
+  "standards": [
+    {
+      "code": "10공영1-01-04",
+      "statement_ko": "말이나 글에 나타난 일이나 사건의 논리적 관계를 파악한다.",
+      "performance_verb": "파악한다",
+      "lesson_evidence": "학생은 알고리즘 편향과 개인정보 문제의 원인 및 결과를 A/B 표에 기록한다.",
+      "condition_ids": ["C3"]
+    },
+    {
+      "code": "10공영1-02-05",
+      "statement_ko": "듣거나 읽은 내용을 요약하여 말하거나 기술한다.",
+      "performance_verb": "요약한다",
+      "lesson_evidence": "학생은 A와 B의 핵심을 하나의 50~70단어 문단으로 통합한다.",
+      "condition_ids": ["C1", "C3"]
+    },
+    {
+      "code": "10공영1-02-06",
+      "statement_ko": "어휘나 표현을 점검하여 내용을 명확하게 전달한다.",
+      "performance_verb": "점검한다",
+      "lesson_evidence": "학생은 관계대명사 횟수와 지문 연속 복사 여부를 자기점검표로 확인한다.",
+      "condition_ids": ["C2", "C4"]
+    }
+  ],
+  "passage_analysis": {
+    "flow": [
+      "A는 AI의 이점 뒤에 있는 알고리즘 편향을 문제로 제시한다.",
+      "B는 개인정보 수집과 통제 상실을 설명한다.",
+      "마지막 문장은 규제와 윤리 지침이라는 공통 해결책을 제안한다."
+    ],
+    "key_vocabulary": ["bias", "unfair treatment", "privacy", "regulation", "ethical guideline"],
+    "target_grammar": ["which/that 관계대명사", "문제-해결 연결어"],
+    "background_knowledge": ["알고리즘의 판단이 학습 데이터에 영향을 받을 수 있음을 간단히 설명한다."]
+  },
+  "sequence": [
+    {
+      "phase": "opening",
+      "minutes": 5,
+      "teacher_actions": ["AI가 편리함과 위험을 동시에 가질 수 있는지 질문한다."],
+      "student_actions": ["자신의 예측을 한 문장으로 말한다."],
+      "questions": ["A와 B 중 어느 문제가 개인에게 더 직접적인가?"],
+      "expected_responses": ["개인정보 문제는 자신의 정보와 직접 연결된다."],
+      "checks_for_understanding": ["학생의 답변에 문제와 근거가 함께 있는지 확인한다."]
+    },
+    {
+      "phase": "reading-analysis",
+      "minutes": 10,
+      "teacher_actions": ["A/B 표의 문제-영향-근거 칸을 안내한다."],
+      "student_actions": ["각 지문에서 핵심 정보를 찾아 표에 적는다."],
+      "questions": ["알고리즘 편향은 어떤 결과를 만들 수 있는가?"],
+      "expected_responses": ["일부 집단이 부당하게 대우받을 수 있다."],
+      "checks_for_understanding": ["각 모둠의 표에 A와 B 정보가 모두 있는지 확인한다."]
+    },
+    {
+      "phase": "guided-writing",
+      "minutes": 10,
+      "teacher_actions": ["문제 두 개와 해결책을 한 문단으로 연결하는 틀을 모델링한다."],
+      "student_actions": ["조건별로 문장 역할을 배치하고 관계대명사 문장을 만든다."],
+      "questions": ["which 또는 that은 어떤 명사를 설명하는가?"],
+      "expected_responses": ["앞 문장의 알고리즘이나 규칙을 설명한다."],
+      "checks_for_understanding": ["학생이 만든 관계대명사 문장의 선행사를 표시하게 한다."]
+    },
+    {
+      "phase": "independent-writing",
+      "minutes": 15,
+      "teacher_actions": ["초안 작성 중 내용 누락과 복사 여부를 순회 점검한다."],
+      "student_actions": ["50~70단어 한 문단을 작성하고 자기점검표를 작성한다."],
+      "questions": ["A와 B의 문제 및 해결책이 모두 들어갔는가?", "지문에서 5단어를 연속으로 복사했는가?"],
+      "expected_responses": ["편향, 사생활, 규제 또는 지침을 포함했다.", "문장을 다시 말해 연속 복사를 제거한다."],
+      "checks_for_understanding": ["교사는 조건 C1~C4 체크 표시를 확인한다.", "두 문장을 표본으로 골라 복사 제한을 함께 검사한다."]
+    },
+    {
+      "phase": "closing",
+      "minutes": 5,
+      "teacher_actions": ["두 문제를 하나의 해결 원리로 묶어 정리한다."],
+      "student_actions": ["출구 티켓에 가장 중요한 조건과 이유를 쓴다."],
+      "questions": ["좋은 요약 답안이 갖추어야 할 한 가지는 무엇인가?"],
+      "expected_responses": ["두 지문의 핵심과 해결책을 근거 있게 연결해야 한다."],
+      "checks_for_understanding": ["출구 티켓에 조건 C3의 핵심이 있는지 확인한다."]
+    }
+  ],
+  "differentiation": {
+    "support": {
+      "sentence_frames": ["A problem is ___, which can ___.", "To address this, we should ___."],
+      "word_bank": ["bias", "privacy", "protect", "rule", "unfair"],
+      "hints": ["A와 B에서 문제를 하나씩 찾은 뒤 해결책을 마지막에 쓴다."]
+    },
+    "core": {
+      "organizer": ["A: problem -> effect", "B: problem -> effect", "shared solution -> final sentence"],
+      "prompts": ["두 문제의 공통 원인을 찾아 한 문장으로 연결한다."]
+    },
+    "extension": {
+      "prompts": ["규제와 윤리 지침의 차이를 한 문장으로 구체화한다."],
+      "challenge_criteria": ["관계대명사를 자연스럽게 사용하면서 의미를 추가한다."]
+    }
+  },
+  "misconceptions": [
+    {
+      "pattern": "which를 접속사처럼 쓰고 선행사를 제시하지 않는다.",
+      "diagnostic_question": "which가 가리키는 명사는 바로 앞에 있는가?",
+      "teacher_response": "선행사를 밑줄 긋고 두 문장을 먼저 나누어 확인한다.",
+      "mini_lesson": "명사 + which/that + 동사 구조로 제한하여 문장을 다시 결합한다."
+    },
+    {
+      "pattern": "A의 편향만 쓰고 B의 개인정보 문제를 빠뜨린다.",
+      "diagnostic_question": "A/B 표의 두 행이 답안에 반영되었는가?",
+      "teacher_response": "누락된 행을 먼저 한 문장으로 말한 뒤 초안에 삽입한다.",
+      "mini_lesson": "문단을 문제 1-문제 2-공통 해결책의 세 역할로 나눈다."
+    }
+  ],
+  "answer_planning": {
+    "condition_to_sentence_map": [
+      "C1: 50~70단어 전체 문단의 길이를 초안 마지막에 확인한다.",
+      "C2: 두 번째와 세 번째 문장에서 which/that을 사용한다.",
+      "C3: 첫 문장에 편향, 둘째 문장에 개인정보, 마지막에 해결책을 쓴다.",
+      "C4: 지문과 초안의 연속 5단어가 겹치지 않는지 점검한다."
+    ],
+    "self_checklist": ["단어 수", "관계대명사 2회", "A/B 핵심과 해결책", "5단어 연속 복사"]
+  },
+  "scoring_anchors": [
+    {"score": 8, "answer_id": "strong", "rationale_ko": "모든 조건과 핵심 내용을 충족하고 연결이 자연스럽다."},
+    {"score": 6, "text": "한 핵심 내용이 약하지만 조건과 해결책은 대체로 충족한다.", "rationale_ko": "내용 일부가 불충분한 경계 사례다."},
+    {"score": 4, "text": "문제 하나와 관계대명사 조건만 충족한다.", "rationale_ko": "요약의 범위와 연결이 부족하다."},
+    {"score": 2, "text": "단어 수를 크게 벗어나고 핵심 근거가 없다.", "rationale_ko": "부분적인 시도만 인정한다."}
+  ],
+  "formative_assessment": {
+    "mid_lesson_check": "A/B 표의 두 행과 공통 해결책 칸을 확인한다.",
+    "peer_checklist": ["두 문제를 모두 언급했는가?", "관계대명사의 선행사가 분명한가?", "지문을 그대로 복사하지 않았는가?"],
+    "exit_ticket": "오늘 답안에서 가장 먼저 확인할 조건 하나와 그 이유를 쓰시오.",
+    "follow_up": "조건을 놓친 학생은 A/B 문장 프레임으로 3문장을 다시 작성한다."
+  }
+}

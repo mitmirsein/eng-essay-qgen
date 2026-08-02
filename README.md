@@ -1,105 +1,121 @@
-# eng-essay-qgen (적응형 영어 서술형 자동 출제 엔진)
+# eng-essay-qgen
 
-중고등학교 영어 서술형 문제 및 교안을 주제와 대상 학년 정보만으로 전자동 생성하는 파이프라인 시스템입니다. 고정된 템플릿에 의존하지 않고, 2022 개정 교육과정 성취기준에 맞춰 AI가 동적으로 가장 적합한 문법, 어휘, 분량 조건을 설계하는 **적응형 출제 엔진(Adaptive Condition Engine)**을 핵심 기술로 사용합니다.
+중고등학교 영어 서술형 평가를 지문 분석, 적응형 조건 설계, 결정론적 검증, 안전한 렌더링,
+교안 생성까지 연결하는 파이프라인입니다. `assessment.json`이 문제·조건·rubric·모범답안의
+private source of truth이며, 학생용 파일은 이 원본에서 allowlist로 파생됩니다.
 
-## 핵심 특징
-1. **적응형(Adaptive) 출제 조건 생성**: 학년(중1~고3)과 지문의 특성을 분석하여 어휘 수준, 목표 문법(예: 분사구문, 가정법 등), 분량(글자 수) 제약 조건을 AI가 스스로 맞춤형 설계합니다.
-2. **전자동 오케스트레이션**: 명령어 하나로 `[지문 창작 ➔ 문제 출제 ➔ 포맷 및 모범 답안 노출 보안 검수 ➔ 교안 작성 ➔ PDF 변환]` 전 과정이 논스톱으로 처리됩니다.
-3. **Format Security 검수망**: 학생용 문제지 본문에 교사용 '모범 답안'이나 채점용 민감 정보가 유출되는 것을 차단하기 위해, 리뷰 스킬(`/essay-review`)이 중간에서 깐깐하게 필터링하고 Fail 시 자동 재작성합니다.
-4. **고품질 PDF 시험지 렌더링**: XeLaTeX 기반 템플릿을 연동하여 실제 학교 기출문제지와 흡사한 2단 포맷 PDF를 즉시 렌더링합니다. (단, 이모지는 자동 제거 혹은 미사용 권장)
-5. **학년 맞춤형 라이팅 코칭**: `/essay-coach`가 학생의 의도를 보존하면서 과제 충족도, 내용, 구성, 문법, 어휘를 분석하고 최소 수정본과 발전 수정본, 재작성 연습을 제공합니다.
+## 핵심 원칙
 
----
+- `고2`와 `고3`은 내부에서 `고2/3`으로 정규화합니다.
+- 조건은 지문·학년·유형에 맞춰 동적으로 설계하며 고정된 인용·상징·문법 목록을 강제하지 않습니다.
+- 학생용 렌더에는 모범답안, rubric, 배점표, 내부 QA가 들어가지 않습니다.
+- 이미지 답안은 VLM 전사 후 `pending-review`를 거쳐 사람이 승인한 경우에만 채점합니다.
+- 기존 파일은 기본적으로 덮어쓰지 않으며 생성물은 `output/` 하위에 격리합니다.
 
-## 🚀 사용법 (Usage)
+## 기본 실행
 
-### 1. 마스터 오케스트레이터 가동 (권장)
-별도의 지문 텍스트 파일이 없어도 **주제**만 제시하면 AI가 대상 학년에 맞춰 완벽한 지문부터 최종 PDF까지 모두 만들어냅니다.
+의존성은 `uv`로 관리합니다.
 
-> `/auto-essay "원하는 주제" [학년] [type1|type2|type3]`
-
-**파라미터 설명:**
-- `주제`: (예) 기후 변화, 학교 폭력 예방, 소셜 미디어의 장단점
-- `[학년]`: 중1, 중2, 중3, 고1, 고2/3 중 하나를 명시 (입력하지 않으면 기본적으로 중고등 통합 난이도로 자동 판별)
-- `[type1|type2|type3]` (선택 사항): 출제 방향성 가이드 (미지정 시 주제에 맞춰 AI가 자동 선택)
-  - **`type1` (문학/추론형)**: 주로 단일 지문(스토리, 일화)을 바탕으로 등장인물의 심리, 행동의 이유, 특정 사물의 상징적 의미를 추론하여 서술하는 유형입니다. *(예: "주인공이 왜 그런 행동을 했는지 본문의 상징을 활용하여 설명하시오.")*
-  - **`type2` (비문학/요약형)**: 주로 복수 지문(A, B)을 바탕으로 공통된 문제점, 원인과 결과 등을 비교 분석하고 종합하여 한 문단으로 요약하는 유형입니다. *(예: "지문 A와 B를 바탕으로 기후 변화의 원인과 해결책을 요약하시오.")*
-  - **`type3` (실용/의견 제시형)**: 고민 상담, 편지, 또는 찬반 논쟁 글을 바탕으로 자신의 입장이나 조언(해결책)을 영작하는 실용문 형태입니다. *(예: "스마트폰 중독을 고민하는 친구의 글을 읽고 조언하는 답장을 쓰시오.")*
-
-**실행 예시:**
 ```bash
-# 고등학교 2학년 수준의 '인공지능과 윤리 문제' 비문학 요약 서술형 출제
-/auto-essay "인공지능과 윤리 문제" 고2 type2
-
-# 중학교 1학년 수준의 '방학 계획 세우기' 문학/추론 서술형 출제
-/auto-essay "방학 계획 세우기" 중1 type1
+uv sync
+uv run pytest -q
+uv run ruff check .
 ```
 
-### 2. 단일 스킬 개별 가동
-이미 준비된 지문 파일이 있거나 파이프라인의 특정 단계만 테스트하고 싶을 때 사용합니다.
+### 지문 gate
 
-- **문제 출제**: `/essay-qgen <지문_파일_경로> [type] [학년]`
-- **문제 검수**: `/essay-review <출제된_문제_마크다운_경로>`
-- **교안 작성**: `/lesson-plan <출제된_문제_마크다운_경로>`
-- **수준별 문항 출제**: `/essay-differentiated <지문_파일_경로> [학년]` (상/중/하 동시 출제)
-- **학생 답안 자동 채점 (텍스트)**: `/essay-grade <문제지_마크다운_경로> "<학생_답안_텍스트>"`
-- **학생 답안 자동 채점 (이미지)**: `/essay-grade <문제지_마크다운_경로> <이미지_파일경로>` (VLM 추출 및 중간 검수 지원)
-- **학생 답안 일괄 채점 (Batch)**: `/essay-grade <문제지_마크다운_경로> --batch` (`input/answer-sheets/` 폴더 내 이미지 일괄 처리)
-- **학생 영작 분석 및 첨삭**: `/essay-coach "<학생_영작>" [학년]`
-- **과제 조건 기반 첨삭**: `/essay-coach <문제지_마크다운_경로> "<학생_영작>" [학년]`
-- **파일 또는 이미지 첨삭**: `/essay-coach <학생_답안_파일경로> [학년]` (이미지는 텍스트 추출 후 HITL 승인 필수)
-- **PDF 변환 수동 실행**: `python3 tools/exam-pdf/make_exam_pdf.py <파일_경로> --title "영어 서술형 평가" --subtitle "[학년] 대비"`
----
-
-## 🛠 사전 요구 사항 (Prerequisites)
-
-본 시스템은 에이전트 프롬프트 템플릿과 기본 Python 스크립트만으로 구동되어 복잡한 `pip` 의존성을 요구하지 않습니다. 단, 2단 포맷 PDF 컴파일을 위해 **반드시 시스템 레벨 패키지가 설치되어 있어야** 합니다.
-
-**Mac 환경 (Homebrew 사용):**
 ```bash
-brew install pandoc
-brew install --cask mactex-no-gui  # XeLaTeX 및 관련 도구 설치
-brew install poppler               # (선택) pdfinfo 명령어를 통한 페이지 수 계산 지원
+uv run python scripts/validate_passage.py passages/example.txt \
+  --grade 중3 --type type2 --report /tmp/passage-report.json
 ```
-*(Windows/Linux의 경우 해당 OS에 맞는 패키지 관리자로 `pandoc`과 `texlive` 패키지를 설치해 주십시오.)*
 
----
+단어 수, 문단 수, 문장 길이 통계, 비정상 공백·문자, type2 A/B 정보량을 검사합니다.
+문체·사실성·편향·민감성은 별도 semantic 또는 사람 검수로 남습니다.
 
-## 📂 폴더 구조 및 파일 설명
+### Assessment package
 
-- `skills/`:
-  - `slash-auto-essay/`: 파이프라인 전 과정을 지휘하는 오케스트레이터 스킬
-  - `slash-essay-qgen/`: 지문을 분석하고 적응형 출제 엔진을 가동하는 스킬
-  - `slash-essay-review/`: 출제된 문제를 검수하고 포맷 에러를 고치는 스킬
-  - `slash-lesson-plan/`: 성취기준이 매핑된 교사용 수업 지도안 생성 스킬
-  - `slash-essay-coach/`: 학생 영작을 학년 수준에 맞게 진단하고 단계별로 첨삭하는 스킬
-- `templates/`: 
-  - `question_prompt.j2`: 적응형 출제 엔진의 핵심인 프롬프트 템플릿 (중고등 성취기준 메타 지식 포함)
-  - `writing_feedback_prompt.j2`: 학년 맞춤형 라이팅 진단 및 단계별 첨삭 출력 템플릿
-- `passages/`: 원문 지문 텍스트 저장소 (`.txt`)
-  - `snow_white.txt`, `white_lie.txt` 등 샘플 지문 포함
-- `input/`: 외부 투입 파일 저장소
-  - `answer-sheets/`: 자동 채점을 위한 학생 답안지 이미지(`.jpg`, `.png` 등) 보관 폴더
-- `output/`: 생성 결과물 격리 저장소
-  - `essay-questions/`: 서술형 문제지 마크다운 및 PDF (`.md`, `.pdf`)
-  - `lesson-plans/`: 교안, 모범 답안, 채점 및 첨삭 피드백 마크다운과 PDF (`.md`, `.pdf`)
+`/essay-qgen` 또는 `/essay-differentiated` 스킬은 다음 구조를 만듭니다.
 
----
+```text
+output/lesson-plans/_packages/<assessment-id>/
+├── assessment.json
+├── lesson-plan.json              # 선택
+├── qa-report.json
+├── manifest.json
+└── rendered/
+    ├── student.md
+    └── teacher.md
+```
 
-## 주의 사항 (Guardrails)
-- 본 프로젝트에 소속된 에이전트는 `AGENTS.md`의 프로젝트 전용 헌법을 따릅니다.
-- 템플릿(`question_prompt.j2`)을 업데이트할 때는 고정된 제약 조건을 삽입하여 시스템을 정형화(Fixed Form) 방향으로 퇴행시키면 안 됩니다. 항상 유연하고 적응형(Adaptive)을 유지하세요.
+직접 검증·렌더링할 때:
 
----
+```bash
+uv run python scripts/validate_assessment.py <assessment.json> --student-scan
+uv run python scripts/render_package.py <assessment.json> \
+  --target all --output /tmp/essay-qgen-render
+uv run python scripts/render_package.py <assessment.json> \
+  --lesson-plan <lesson-plan.json> --target teacher \
+  --output /tmp/essay-qgen-teacher
+```
 
-## 🙏 Acknowledgements
-본 프로젝트의 기초적인 아이디어 및 영감은 다음 포스트에서 착안하였습니다:
-- [Threads 포스트](https://www.threads.com/share/FukWvhRP9/)
+`render_package.py`는 렌더 후 manifest와 QA 보고서를 기록합니다. private package는
+`output/lesson-plans/_packages/` 밖에 저장하지 않습니다.
 
-본 프로젝트의 중등 교육과정 성취기준 및 메타 지식은 다음 레포지토리를 참고하여 설계되었습니다:
-- [DECK6/korean-secondary-learning-map](https://github.com/DECK6/korean-secondary-learning-map)
+### 교안
 
----
+```bash
+uv run python scripts/validate_lesson_plan.py <lesson-plan.json> \
+  --assessment <assessment.json>
+```
 
-## 📜 License
-This project is licensed under the [MIT License](LICENSE).
+교안은 `templates/lesson_plan_prompt.j2`가 JSON을 생성하고, validator가 수업 시간 합계,
+교육과정 reference, 발문·예상 반응·확인 방법, 수준별 지원, 오개념, 답안 계획을 검사합니다.
+
+### 교사 운영
+
+```bash
+uv run python scripts/validate_teacher_profile.py config/teacher_profile.example.yaml
+uv run python scripts/build_teacher_index.py output/lesson-plans/_packages \
+  --output /tmp/teacher-index.md
+uv run python scripts/mark_stale.py <manifest.json> passage
+uv run python scripts/build_class_insights.py <grading-rows.json> \
+  --output output/lesson-plans/class-insights/<batch-id>
+uv run python scripts/export_sample_outputs.py --date 20260802
+```
+
+배치 전사/HITL 상태는 다음 CLI로 관리합니다.
+
+```bash
+uv run python scripts/manage_batch.py init batch-001 \
+  --output-root output/lesson-plans/grading \
+  --source input/answer-sheets/example.png
+uv run python scripts/manage_batch.py transition <batch-dir> <anonymous-id> pending-review
+uv run python scripts/manage_batch.py eligible <batch-dir>
+```
+
+학생 이름은 기본 출력에 사용하지 않고, 원본 경로 매핑은 `source_map.local.json`으로 분리합니다.
+
+## PDF
+
+```bash
+python3 tools/exam-pdf/make_exam_pdf.py <student.md> \
+  --profile exam --title "영어 서술형 평가" --total-points 8 -o <student.pdf>
+python3 tools/exam-pdf/make_exam_pdf.py <teacher.md> \
+  --profile teacher --title "교사용 수업 지도안" -o <teacher.pdf>
+```
+
+`exam`은 2단·이름란·총점, `teacher`는 1단·이름란 없음, `feedback`은 선택적 필드와 총점을
+사용합니다. Pandoc/XeLaTeX return code, Missing character, Overfull hbox를 확인하며 실패 시
+non-zero로 종료합니다.
+
+## 프로젝트 경로
+
+- `schemas/`: assessment, lesson plan, teacher profile 계약
+- `src/eng_essay_qgen/`: I/O, metric, validator, renderer, 운영 로직
+- `templates/`: assessment·교안 생성 및 Markdown 렌더 prompt
+- `references/`: 2022 개정 교육과정 reference와 출처
+- `skills/`: `/auto-essay`, `/essay-qgen`, `/essay-review`, `/lesson-plan`, `/essay-grade` 흐름
+- `output/`: 생성물 전용 경로
+
+교육과정 코드는 [references/curriculum-2022-sources.md](references/curriculum-2022-sources.md)에
+기록된 공식 교육자료를 확인한 reference만 사용합니다.

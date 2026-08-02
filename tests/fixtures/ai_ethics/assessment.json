@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "assessment_id": "20260802_210000-type2-ai_ethics",
+  "metadata": {
+    "title": "영어 서술형 평가",
+    "topic": "인공지능과 윤리",
+    "grade": "고2",
+    "question_type": "type2",
+    "total_points": 8,
+    "created_at": "2026-08-02T21:00:00+09:00",
+    "source_passage_path": "passages/20260801_123000-type2-ai_ethics.txt"
+  },
+  "passage": {
+    "genre": "expository",
+    "text": "(A) The rapid advancement of artificial intelligence brings huge benefits, such as automating tedious tasks and solving complex medical problems. However, it also raises significant ethical concerns. One major issue is the potential for bias in algorithms, which can lead to unfair treatment of certain groups.\n\n(B) Another critical ethical challenge is the loss of privacy. As AI systems collect and analyze vast amounts of personal data to improve their accuracy, individuals often lose control over their own information. To prevent these problems, strict regulations and ethical guidelines must be established before deploying such technologies widely.",
+    "sections": [
+      {"id": "A", "text": "The rapid advancement of artificial intelligence brings huge benefits, such as automating tedious tasks and solving complex medical problems. However, it also raises significant ethical concerns. One major issue is the potential for bias in algorithms, which can lead to unfair treatment of certain groups."},
+      {"id": "B", "text": "Another critical ethical challenge is the loss of privacy. As AI systems collect and analyze vast amounts of personal data to improve their accuracy, individuals often lose control over their own information. To prevent these problems, strict regulations and ethical guidelines must be established before deploying such technologies widely."}
+    ]
+  },
+  "task": {
+    "instruction_ko": "다음 글 (A)와 (B)를 읽고 인공지능의 윤리적 문제와 해결책을 영어로 서술하시오.",
+    "audience": "teacher-assigned",
+    "purpose": "synthesis",
+    "response_format": "one-paragraph"
+  },
+  "conditions": [
+    {
+      "id": "C1",
+      "category": "length",
+      "text_ko": "총 50~70단어로 작성할 것.",
+      "validation": {"kind": "word_count", "check_mode": "deterministic", "params": {"min": 50, "max": 70}}
+    },
+    {
+      "id": "C2",
+      "category": "grammar",
+      "text_ko": "관계대명사를 두 번 이상 사용할 것.",
+      "validation": {"kind": "surface_pattern", "check_mode": "deterministic", "params": {"pattern": "\\b(?:who|which|that)\\b", "min_count": 2}}
+    },
+    {
+      "id": "C3",
+      "category": "content",
+      "text_ko": "편향성, 사생활 침해, 해결책을 모두 포함할 것.",
+      "validation": {"kind": "semantic", "check_mode": "semantic", "params": {}}
+    },
+    {
+      "id": "C4",
+      "category": "restriction",
+      "text_ko": "지문에서 5단어 이상을 연속해서 그대로 베껴 쓰지 말 것.",
+      "validation": {"kind": "ngram_limit", "check_mode": "deterministic", "params": {"n": 5}}
+    }
+  ],
+  "rubric": [
+    {"id": "R1", "condition_ids": ["C1", "C2"], "points": 3, "full_credit_ko": "분량과 관계대명사 조건을 충족한다."},
+    {"id": "R2", "condition_ids": ["C3"], "points": 3, "full_credit_ko": "두 윤리 문제와 해결책을 모두 설명한다."},
+    {"id": "R3", "condition_ids": ["C4"], "points": 2, "full_credit_ko": "지문을 그대로 복사하지 않는다."}
+  ],
+  "language_policy": {
+    "error_penalty": 0.5,
+    "max_language_penalty": 2.0,
+    "repeated_error_policy": "same-root-once",
+    "double_penalty_allowed": false
+  },
+  "model_answers": [
+    {
+      "id": "minimum",
+      "level": "minimum-pass",
+      "text": "AI tools can help people, but they may create unfair decisions that hurt groups. They can also collect data that reduces privacy. Clear rules can protect users, and human reviewers can check harmful choices. People should use technology carefully and ask which systems are safe before trusting them in daily life.",
+      "rationale_ko": "핵심 조건을 최소 수준으로 충족하는 답안이다."
+    },
+    {
+      "id": "strong",
+      "level": "proficient",
+      "text": "Artificial intelligence offers useful services, yet biased algorithms can treat communities unfairly. Systems which gather personal information may also weaken privacy. Governments should create firm rules that protect individuals before these tools become widespread. Careful human oversight can reduce unfair decisions, while responsible design helps people keep control over their data and use technology safely.",
+      "rationale_ko": "모든 조건과 핵심 내용을 충분히 충족하는 답안이다."
+    },
+    {
+      "id": "alternative",
+      "level": "alternative",
+      "text": "The passage suggests that AI can be helpful when people control it responsibly. Algorithms that learn from limited data may produce unfair outcomes, and services which store personal details can threaten privacy. Companies should explain their systems, while independent reviewers check them. Public rules and regular testing can make useful technology safer for different communities.",
+      "rationale_ko": "표현은 다르지만 두 문제와 해결책을 연결하는 허용 가능한 대안이다."
+    },
+    {
+      "id": "common-error",
+      "level": "common-error",
+      "text": "Artificial intelligence can improve services that help many people. Systems that collect personal information may threaten privacy. Students should use these tools carefully and follow clear rules. Human reviewers can check decisions and protect users. This answer explains privacy and practical safeguards, but it does not discuss unfair treatment caused by biased algorithms.",
+      "rationale_ko": "형식 조건은 충족하지만 편향성 내용을 빠뜨린 대표적인 의미 오류다."
+    }
+  ]
+}

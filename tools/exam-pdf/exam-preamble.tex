@@ -1,17 +1,16 @@
 \usepackage{kotex}
-\usepackage{csquotes}
 \usepackage{xcolor}
 \usepackage{array}
 \usepackage{multicol}
 \usepackage{fancyhdr}
 
 % ── Fonts ─────────────────────────────────────────────────────────────
-% Latin: Noto Serif (pairs with Noto Serif KR). Circled numerals ①..⑳
-% resolve through the Hangul-font fallback.
-\setmainfont{Noto Serif}[Scale=0.96]
-\setsansfont{Noto Sans}
-\setmainhangulfont{Noto Serif KR}[InterHangul=-0.02em]
-\setsanshangulfont{Noto Sans KR}
+% Use fonts available on the baseline macOS/TeX Live image. Projects may
+% override these names in a local preamble if their school fonts differ.
+\setmainfont{Times New Roman}[Scale=0.96]
+\setsansfont{Arial}
+\setmainhangulfont{Apple SD Gothic Neo}
+\setsanshangulfont{Apple SD Gothic Neo}
 
 % ── Two-column region (multicol): last page balances, the separator rule
 %    only spans the actual text height — no rule down an empty column. ──
@@ -58,15 +57,15 @@
 \renewcommand{\maketitle}{%
   \thispagestyle{plain}%
   \begin{center}
-    {\fontspec{Noto Sans KR}\bfseries\Large \@title\par}
+    {\fontspec{Apple SD Gothic Neo}\bfseries\Large \@title\par}
     \vspace{3pt}
-    {\fontspec{Noto Sans KR}\large \exam@subtitle\par}
+    {\fontspec{Apple SD Gothic Neo}\large \exam@subtitle\par}
   \end{center}
   \vspace{4pt}
   {\color{black!75}\hrule height 1.1pt}
   \vspace{3.5pt}
   \noindent
-  {\fontspec{Noto Sans KR}\normalsize
+  {\fontspec{Apple SD Gothic Neo}\normalsize
    \exam@field\hfill \exam@meta\par}
   \vspace{2.5pt}
   {\color{black!75}\hrule height 0.4pt}

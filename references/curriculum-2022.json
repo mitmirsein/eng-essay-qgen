@@ -1,0 +1,147 @@
+{
+  "reference_version": "2026-08-02",
+  "title": "2022 개정 영어과 성취기준 최소 reference",
+  "verification_policy": "Codes are accepted only when present in an official education resource listed in sources.md.",
+  "standards": [
+    {
+      "code": "9영03-02",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "이해",
+      "statement_ko": "일상생활이나 친숙한 일반적 대상이나 주제에 관한 글을 읽고 세부 정보를 파악한다.",
+      "performance_verb": "파악한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202401040956090010.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영03-04",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "이해",
+      "statement_ko": "일상생활이나 친숙한 일반적 주제의 글을 읽고 줄거리, 주제, 요지를 파악한다.",
+      "performance_verb": "파악한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202401040956090010.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영03-06",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "이해",
+      "statement_ko": "일상생활이나 친숙한 일반적 주제의 글을 읽고 필자의 의도나 목적을 추론한다.",
+      "performance_verb": "추론한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202401040956090010.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영03-08",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "이해",
+      "statement_ko": "일상생활이나 친숙한 일반적 주제의 글을 읽고 일이나 사건의 원인과 결과를 추론한다.",
+      "performance_verb": "추론한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030062/BBS_201812310813583710.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영04-01",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "표현",
+      "statement_ko": "일상생활에 관한 주변의 대상이나 상황을 묘사하는 문장을 쓴다.",
+      "performance_verb": "쓴다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202401040956090010.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영04-02",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "표현",
+      "statement_ko": "일상생활에 관한 자신의 의견이나 감정을 표현하는 문장을 쓴다.",
+      "performance_verb": "표현한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030062/BBS_201812310813583710.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "9영04-04",
+      "school_level": "중학교",
+      "subject": "영어",
+      "domain": "표현",
+      "statement_ko": "개인 생활의 경험이나 계획에 대해 문장을 쓴다.",
+      "performance_verb": "쓴다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202401040956090010.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "10공영1-01-01",
+      "school_level": "고등학교",
+      "subject": "공통영어 1",
+      "domain": "이해",
+      "statement_ko": "말이나 글에 포함된 세부 정보를 파악한다.",
+      "performance_verb": "파악한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030224/BBS_202503100916461190.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "10공영1-01-04",
+      "school_level": "고등학교",
+      "subject": "공통영어 1",
+      "domain": "이해",
+      "statement_ko": "말이나 글에 나타난 일이나 사건의 논리적 관계를 파악한다.",
+      "performance_verb": "파악한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030224/BBS_202503100916461190.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "10공영1-02-04",
+      "school_level": "고등학교",
+      "subject": "공통영어 1",
+      "domain": "표현",
+      "statement_ko": "자신의 생각이나 의견, 감정, 감상 등을 표현한다.",
+      "performance_verb": "표현한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030224/BBS_202503100916461190.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "10공영1-02-05",
+      "school_level": "고등학교",
+      "subject": "공통영어 1",
+      "domain": "표현",
+      "statement_ko": "듣거나 읽은 내용을 요약하여 말하거나 기술한다.",
+      "performance_verb": "요약한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202502250541471270.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "10공영1-02-06",
+      "school_level": "고등학교",
+      "subject": "공통영어 1",
+      "domain": "표현",
+      "statement_ko": "어휘나 표현을 점검하여 내용을 명확하게 전달한다.",
+      "performance_verb": "점검한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030136/BBS_202502250541471270.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "12영Ⅱ-01-03",
+      "school_level": "고등학교",
+      "subject": "영어Ⅱ",
+      "domain": "이해",
+      "statement_ko": "말이나 글에 나타난 화자, 필자, 인물 등의 심정이나 의도를 추론한다.",
+      "performance_verb": "추론한다",
+      "source_url": "https://www.goe.go.kr/resource/old/BBSMSTR_000000030224/BBS_202503140951129581.pdf",
+      "verified_on": "2026-08-02"
+    },
+    {
+      "code": "12영Ⅱ-02-05",
+      "school_level": "고등학교",
+      "subject": "영어Ⅱ",
+      "domain": "표현",
+      "statement_ko": "적절한 전략을 활용하여 논리적으로 대상을 설득한다.",
+      "performance_verb": "설득한다",
+      "source_url": "https://www.goe.go.kr/resource/goe/na/bbs_2675/2026/02/ed0f7745-745f-4312-9a96-e6e304c646fb.pdf",
+      "verified_on": "2026-08-02"
+    }
+  ]
+}

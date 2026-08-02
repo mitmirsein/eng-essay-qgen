@@ -1,0 +1,21 @@
+school_name: ""
+default_grade: "중3"
+lesson_duration_minutes: 45
+class_size: 30
+proficiency_profile: "mixed"
+instruction_language_ratio:
+  korean: 70
+  english: 30
+default_total_points: 8
+language_penalty:
+  per_error: 0.5
+  maximum: 2.0
+  repeated_error_policy: "same-root-once"
+pdf_profile: "teacher"
+output_formats:
+  - markdown
+  - pdf
+privacy:
+  use_anonymous_student_ids: true
+  retain_handwriting_images: false
+  retention_days: 30

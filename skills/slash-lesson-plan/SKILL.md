@@ -1,63 +1,45 @@
 ---
 name: slash-lesson-plan
-description: 출제된 영어 서술형 문제와 지문을 바탕으로 교사용 수업 지도안(교안)을 자동 생성합니다. (2022 개정 영어과 교육과정 성취기준 연동)
-status: active
-version: 1.0.0
+description: 검증된 assessment package와 교육과정 reference로 구조화된 교안 JSON과 교사용 렌더를 생성합니다.
 ---
 
 # /lesson-plan 워크플로우
 
-이 스킬은 출제 완료된 서술형 문제 파일(`.md`)과 원본 지문을 입력받아, 교사가 수업 시간에 활용할 수 있는 형태의 **수업 지도안(Lesson Plan)**을 생성하는 프롬프트 워크플로우입니다.
+`/lesson-plan <assessment.json> [teacher_profile.yaml]`을 실행한다. 학생용 Markdown을
+원본으로 사용하지 않는다.
 
-## 사용법
-`/lesson-plan <출제된_문제_파일_경로>`
+## 생성 절차
 
-## 실행 단계 (프롬프트 엔진)
+1. assessment schema와 deterministic validator가 통과했는지 확인한다.
+2. `config/teacher_profile.example.yaml` 또는 명시된 profile을 읽고 CLI override를 적용한다.
+3. `references/curriculum-2022.json`에서 대상 학년·수업 목표에 맞는 성취기준을 고른다.
+   reference에 없는 코드는 사용하지 않는다.
+4. `templates/lesson_plan_prompt.j2`에 assessment, profile, curriculum reference, 수업
+   시간, 수업 모드를 주입한다. prompt의 출력은 JSON 하나뿐이며 assessment의 조건·rubric·
+   답안을 복제하거나 변경하지 않는다.
+5. `lesson-plan.json`을 다음 경로에 저장하고 validator를 실행한다.
 
-사용자가 `/lesson-plan`을 호출하면, 파일 내용을 분석하여 아래 프롬프트를 바탕으로 고품질의 교안을 작성합니다.
+   ```bash
+   uv run python scripts/validate_lesson_plan.py \
+     output/lesson-plans/_packages/<assessment-id>/lesson-plan.json \
+     --assessment output/lesson-plans/_packages/<assessment-id>/assessment.json
+   ```
 
-### 프롬프트 지시사항
-너는 최고의 중고등부 영어 교재 연구원이자 수석 교사야. 제공된 영어 지문과 서술형 문제(3가지 조건)를 분석하여 실제 45분 수업에서 활용할 수 있는 **교사용 수업 지도안(Lesson Plan)**을 작성해 줘.
+   수업 시간 합계, 발문별 예상 반응·확인 방법, condition 계획, 성취기준 코드, 수준별
+   지원, 오개념, scoring anchors, placeholder·emoji를 검사한다.
+6. 교사용 렌더에 lesson plan JSON을 연결한다.
 
-**[핵심 요구사항: 2022 개정 교육과정 연동]**
-이 수업이 대한민국 **2022 개정 교육과정 영어과 성취기준(NCIC 참조)** 중 어떤 항목과 연결되는지 분석하여 명시해라. (예: "읽기 - 세부 정보 파악", "쓰기 - 조건에 맞는 문단 쓰기", "심미적 감성 역량" 등)
+   ```bash
+   uv run python scripts/render_package.py \
+     output/lesson-plans/_packages/<assessment-id>/assessment.json \
+     --lesson-plan output/lesson-plans/_packages/<assessment-id>/lesson-plan.json \
+     --target teacher --output output/lesson-plans/<assessment-id>
+   ```
 
-**[출력 형식]**
-(주의: PDF 변환 시 오류를 방지하기 위해 이모티콘이나 특수문자를 절대 사용하지 마세요.)
-```markdown
-## 교사용 수업 지도안 (Lesson Plan)
+## 교육적 품질
 
-### 1. 수업 개요 및 교육과정 매핑
-- **관련 성취기준 (2022 개정 기준)**: (자연어로 성취기준 영역과 핵심 역량을 맵핑하여 설명)
-- **수업 목표**: (지문 내용 이해 및 3가지 서술 조건 달성)
-
-### 2. 지문 핵심 분석 (Comprehension)
-- **주요 어휘 (Key Vocabulary)**: (지문 내 핵심 단어 3~5개 정리 및 뜻)
-- **핵심 문법 (Target Grammar)**: (지문 내에서 문법적으로 중요한 포인트 1~2개 설명)
-- **내용 흐름 (Plot Summary)**: (학생들에게 설명하기 쉬운 내용 요약)
-
-### 3. 서술형 문제 풀이 지도 전략 (Step-by-Step)
-- **조건 1 지도 팁**: (어떻게 5단어를 효과적으로 찾고 인용할지 안내)
-- **조건 2 지도 팁**: (거울 등의 상징을 학생 스스로 추론하게 유도하는 발문/질문)
-- **조건 3 지도 팁**: (학생들이 자신의 생각을 영어로 표현할 때 쓸 수 있는 유용한 패턴/표현 제시)
-
-### 4. 교사용 모범 답안 (Sample Answer)
-(모든 조건을 만족하는 완벽한 모범 답안을 영어로 작성하여 제공)
-
-### 5. 채점 기준 및 배점표 (Rubric)
-- **[배점] 조건 1**: (해당 조건의 채점 기준 서술)
-- **[배점] 조건 2**: (해당 조건의 채점 기준 서술)
-- **[배점] 조건 3**: (해당 조건의 채점 기준 서술)
-- (기타 문법/어휘 감점 기준 명시)
-
-### 6. 교사용 수업 스크립트 예시
-(수업 도입부나 핵심 설명 시 교사가 실제로 말할 수 있는 대본 예시 2~3문장)
-```
-
-## 에이전트 행동 수칙
-1. 입력된 마크다운 파일을 읽는다. 파일 경로가 제공되지 않은 경우, `projects/eng-essay-qgen/output/essay-questions/` 디렉토리의 가장 최근 파일을 읽는다.
-2. 위 지시사항을 정확히 준수하여 마크다운 포맷으로 교안 데이터를 생성한다. (이모지 절대 사용 금지)
-3. **결과물 저장**: 생성된 교안을 터미널에만 출력하지 말고, 반드시 파일 쓰기 도구를 사용하여 `projects/eng-essay-qgen/output/lesson-plans/` 폴더 내에 `YYYYMMDD_HHMMSS-type-주제_lesson.md` 형태의 파일로 저장한다.
-4. 파일 저장이 완료되면, 프로젝트 내부의 `tools/exam-pdf`를 사용하여 PDF로 변환한다.
-   - 실행 명령어: `python3 tools/exam-pdf/make_exam_pdf.py [저장된_교안_마크다운_경로] --title "교사용 수업 지도안" --subtitle "[학년] 영어 서술형 대비"` (학년 정보가 없으면 "영어 서술형 대비")
-5. PDF 변환까지 완료되면 사용자에게 "수업 교안이 생성되어 [파일명] 경로에 마크다운 및 PDF로 저장되었습니다."라고 보고한다.
+- type1은 지문 근거와 해석을, type2는 A/B 정보 조직과 패러프레이징을, type3은 독자·목적·
+  실행 가능한 조언 또는 의견을 중심으로 지도한다.
+- differentiated는 공통 목표를 유지하면서 support, core, extension의 접근 방식만 조절한다.
+- 모든 목표는 관찰 가능한 학생 행동으로 쓰고, 실제 지문에 없는 어휘·문법·상징을 만들지 않는다.
+- 장식용 이모지와 XeLaTeX 취약 문자는 교안 데이터와 PDF 입력에서 사용하지 않는다.

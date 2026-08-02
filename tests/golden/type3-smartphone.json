@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "assessment_id": "golden-type3-smartphone",
+  "overview": {
+    "grade": "중1",
+    "duration_minutes": 45,
+    "lesson_mode": "practical-writing",
+    "materials": ["학생용 문제지", "편지 구조표", "조언 표현 카드"],
+    "objectives": [
+      "학생은 편지의 독자와 문제 상황을 파악한다.",
+      "학생은 공손하고 실행 가능한 조언을 영어로 쓴다."
+    ]
+  },
+  "standards": [
+    {
+      "code": "9영04-02",
+      "statement_ko": "일상생활에 관한 자신의 의견이나 감정을 표현하는 문장을 쓴다.",
+      "performance_verb": "표현한다",
+      "lesson_evidence": "학생은 친구의 스마트폰 사용 문제에 대한 공감과 의견을 문장으로 쓴다.",
+      "condition_ids": ["C1"]
+    },
+    {
+      "code": "9영04-04",
+      "statement_ko": "개인 생활의 경험이나 계획에 대해 문장을 쓴다.",
+      "performance_verb": "쓴다",
+      "lesson_evidence": "학생은 잠들기 전 스마트폰을 내려놓는 구체적 계획을 조언문에 포함한다.",
+      "condition_ids": ["C2", "C3"]
+    }
+  ],
+  "passage_analysis": {
+    "flow": ["친구는 밤늦게 스마트폰을 사용해 피곤하다.", "화자는 공감한 뒤 건강과 공부를 위한 행동을 제안한다."],
+    "key_vocabulary": ["worried", "tired", "health", "habit", "help"],
+    "target_grammar": ["should 조언", "to부정사 목적"],
+    "background_knowledge": ["공손한 조언은 문제를 인정하고 실행 방법을 제시한다."]
+  },
+  "sequence": [
+    {
+      "phase": "audience",
+      "minutes": 10,
+      "teacher_actions": ["편지의 독자와 문제 상황을 표시하게 한다."],
+      "student_actions": ["친구의 문제와 감정을 한 문장으로 요약한다."],
+      "questions": ["누구에게 어떤 도움을 주는 글인가?"],
+      "expected_responses": ["스마트폰 때문에 힘든 친구에게 조언하는 글이다."],
+      "checks_for_understanding": ["독자와 문제를 정확히 말하는지 확인한다."]
+    },
+    {
+      "phase": "advice",
+      "minutes": 20,
+      "teacher_actions": ["공감-조언-실행 계획 순서의 편지 구조를 모델링한다."],
+      "student_actions": ["should와 구체적 행동을 사용해 조언 문장을 만든다."],
+      "questions": ["좋은 조언은 언제 어떻게 행동하라고 말하는가?"],
+      "expected_responses": ["잠들기 전에 스마트폰을 내려놓으라고 구체적으로 말한다."],
+      "checks_for_understanding": ["조언이 실행 가능한 행동인지 확인한다."]
+    },
+    {
+      "phase": "rewrite",
+      "minutes": 15,
+      "teacher_actions": ["편지의 인사와 맺음말, 공손한 어조를 점검하게 한다."],
+      "student_actions": ["짧은 답장을 쓰고 친구 검토표로 수정한다."],
+      "questions": ["독자를 배려하는 표현이 있는가?"],
+      "expected_responses": ["공감 표현과 부드러운 조언 표현을 사용한다."],
+      "checks_for_understanding": ["C1~C3 표시와 형식 요소를 확인한다."]
+    }
+  ],
+  "differentiation": {
+    "support": {"sentence_frames": ["I understand you. You should ___."], "word_bank": ["tired", "health", "before bed"], "hints": ["문제-조언-시간 순서로 쓴다."]},
+    "core": {"organizer": ["공감", "구체적 조언", "실행 시점"], "prompts": ["친구가 바로 할 수 있는 행동을 제안한다."]},
+    "extension": {"prompts": ["조언의 이유와 기대 효과를 덧붙인다."], "challenge_criteria": ["공손한 어조와 구체성을 함께 유지한다."]}
+  },
+  "misconceptions": [
+    {"pattern": "해야 할 행동 없이 건강이 중요하다고만 쓴다.", "diagnostic_question": "친구가 오늘 밤 실제로 할 수 있는 행동은 무엇인가?", "teacher_response": "시간과 행동을 한 문장에 넣게 한다.", "mini_lesson": "should + 동사와 before bed 표현을 결합한다."}
+  ],
+  "answer_planning": {
+    "condition_to_sentence_map": ["C1: 첫 문장에서 친구의 문제에 공감한다.", "C2: 둘째 문장에서 should로 조언한다.", "C3: 마지막에 구체적인 시간과 행동을 제시한다."],
+    "self_checklist": ["독자", "공감", "should 조언", "구체적 행동"]
+  },
+  "scoring_anchors": [
+    {"score": 8, "answer_id": "strong", "rationale_ko": "독자와 상황에 맞는 공감, 조언, 실행 계획을 모두 제시한다."},
+    {"score": 6, "text": "조언은 구체적이나 공감 표현이 약하다.", "rationale_ko": "핵심 행동은 있으나 편지 목적이 덜 드러난다."},
+    {"score": 4, "text": "스마트폰 문제를 말하지만 행동 계획이 없다.", "rationale_ko": "상황 설명만 부분적으로 충족한다."},
+    {"score": 2, "text": "관련 단어만 나열한다.", "rationale_ko": "독자에게 전달할 문장이 부족하다."}
+  ],
+  "formative_assessment": {
+    "mid_lesson_check": "공감-조언-실행 계획 세 칸을 확인한다.",
+    "peer_checklist": ["친구를 배려하는가?", "should 조언이 있는가?", "실행 시점이 분명한가?"],
+    "exit_ticket": "친구가 오늘 밤 할 수 있는 조언 한 문장을 쓴다.",
+    "follow_up": "행동과 시간을 포함한 문장으로 조언을 다시 쓴다."
+  }
+}

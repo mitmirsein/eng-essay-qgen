@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eng-essay-qgen.local/schemas/teacher-profile.schema.json",
+  "title": "Teacher Profile",
+  "type": "object",
+  "required": [
+    "school_name",
+    "default_grade",
+    "lesson_duration_minutes",
+    "class_size",
+    "proficiency_profile",
+    "instruction_language_ratio",
+    "default_total_points",
+    "language_penalty",
+    "pdf_profile",
+    "output_formats",
+    "privacy"
+  ],
+  "properties": {
+    "school_name": {"type": "string"},
+    "default_grade": {"type": "string", "enum": ["중1", "중2", "중3", "고1", "고2/3"]},
+    "lesson_duration_minutes": {"type": "integer", "minimum": 1, "maximum": 180},
+    "class_size": {"type": "integer", "minimum": 1, "maximum": 200},
+    "proficiency_profile": {"type": "string", "enum": ["mixed", "support", "core", "extension"]},
+    "instruction_language_ratio": {
+      "type": "object",
+      "required": ["korean", "english"],
+      "properties": {
+        "korean": {"type": "integer", "minimum": 0, "maximum": 100},
+        "english": {"type": "integer", "minimum": 0, "maximum": 100}
+      },
+      "additionalProperties": false
+    },
+    "default_total_points": {"type": "number", "exclusiveMinimum": 0},
+    "language_penalty": {
+      "type": "object",
+      "required": ["per_error", "maximum", "repeated_error_policy"],
+      "properties": {
+        "per_error": {"type": "number", "minimum": 0},
+        "maximum": {"type": "number", "minimum": 0},
+        "repeated_error_policy": {"type": "string", "enum": ["same-root-once", "each-occurrence"]}
+      },
+      "additionalProperties": false
+    },
+    "pdf_profile": {"type": "string", "enum": ["exam", "teacher", "feedback"]},
+    "output_formats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "enum": ["markdown", "pdf", "html", "docx"]}
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["use_anonymous_student_ids", "retain_handwriting_images"],
+      "properties": {
+        "use_anonymous_student_ids": {"type": "boolean"},
+        "retain_handwriting_images": {"type": "boolean"},
+        "retention_days": {"type": "integer", "minimum": 0},
+        "name_mapping_path": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

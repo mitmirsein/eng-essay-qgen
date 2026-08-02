@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eng-essay-qgen"
+version = "0.1.0"
+description = "Deterministic assessment packages and rendering tools for English essay questions"
+requires-python = ">=3.11"
+dependencies = [
+  "jinja2>=3.1,<4",
+  "jsonschema>=4.23,<5",
+  "PyYAML>=6.0,<7",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3,<9",
+  "ruff>=0.6,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "scripts", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

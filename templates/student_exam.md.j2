@@ -1,0 +1,31 @@
+# {{ title }}
+
+**{{ instruction }} [{{ total_points }}점]**
+
+> 지문 (Reading Passage)
+{% if passage_sections %}
+{% for section in passage_sections %}
+**({{ section.id }})** {{ section.text }}
+{% endfor %}
+{% else %}
+{{ passage_text }}
+{% endif %}
+
+{% if levels %}
+{% for level in levels %}
+### {{ level.label }}
+
+**{{ level.instruction }} [{{ level.points }}점]**
+
+### 조건
+{% for condition in level.conditions %}
+{{ loop.index }}. {{ condition.text }}
+{% endfor %}
+
+{% endfor %}
+{% else %}
+### 조건
+{% for condition in conditions %}
+{{ loop.index }}. {{ condition.text }}
+{% endfor %}
+{% endif %}

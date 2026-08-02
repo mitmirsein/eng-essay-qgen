@@ -1,32 +1,39 @@
-# exam-pdf — 시험지 마크다운 → 2단 PDF
+# exam-pdf
 
-`theology-pdf-maker`는 신학 논문용이라 시험지에 쓰면 디테일이 망가진다
-(`①②③` → `(1)(2)(3)` 강제 변환, 단일 컬럼, 학술 프리앰블). 이 도구는
-**시험지 전용**으로, 문항 텍스트는 한 글자도 바꾸지 않고 조판만 정리한다.
+Markdown을 학생 시험지, 교사용 지도안, 피드백 PDF로 변환하는 도구입니다.
 
-## 하는 일
-- 원문자 `①..⑳`를 그대로 유지
-- `multicol` 균형 2단 — 마지막 페이지 양 컬럼이 균등, 구분선이 빈 컬럼으로
-  흘러내리지 않음
-- 지문/보기 = 연회색 음영 박스(분리불가 → 컬럼 경계와 충돌 안 함)
-- 시험지 머리글(제목 · 부제 · 학년/반/번호/이름란 · 총점 자동 합산)
-- 원본 마크다운의 파싱 함정 자동 교정:
-  - 인용문 앞 빈 줄 삽입(노출되던 리터럴 `>` 제거)
-  - `&nbsp;`로 정렬한 답안 매트릭스(예: 8번 `[A]/[B]`)를 진짜 `tabular`로 변환
+## 프로필
 
-## 사용법
+| profile | 레이아웃 | 이름란 | 총점 |
+| --- | --- | --- | --- |
+| `exam` | 2단 | 있음 | 있음 |
+| `teacher` | 1단 | 없음 | 없음 |
+| `feedback` | 1단 | 선택 | 선택 |
+
 ```bash
-python3 make_exam_pdf.py 입력.md \
-  --title    "2025학년도 1학기 2차 지필평가" \
-  --subtitle "용동중학교 3학년 · 영어" \
-  [--field   "3학년 ___반 ___번  이름 _______"] \
-  [-o 출력.pdf]
+python3 tools/exam-pdf/make_exam_pdf.py student.md \
+  --profile exam --title "영어 서술형 평가" \
+  --subtitle "고2/3 대비" --total-points 8 -o student.pdf
+
+python3 tools/exam-pdf/make_exam_pdf.py teacher.md \
+  --profile teacher --title "교사용 수업 지도안" -o teacher.pdf
 ```
 
-## 의존성
-- `pandoc`, `xelatex`(TeX Live)
-- 폰트: Noto Serif / Noto Serif KR / Noto Sans / Noto Sans KR
+## 실패 정책
 
-## 파일
-- `make_exam_pdf.py` — 변환 + 빌드(자족적)
-- `exam-preamble.tex` — XeLaTeX 프리앰블(폰트·2단·박스·머리글)
+- Pandoc과 XeLaTeX의 return code를 모두 확인합니다.
+- `Missing character`는 기본 0개만 허용합니다.
+- `Overfull hbox`는 기본 0개만 허용하며 `--max-overfull`로 명시적으로 완화할 수 있습니다.
+- 시험 프로필은 양수 총점이 없으면 실패합니다.
+- 실패 시 임시 작업 디렉터리 경로를 출력해 로그를 보존하고, 성공 시 임시 파일을 정리합니다.
+- 제목·부제목·필드의 TeX 특수 문자를 escape합니다.
+
+## 의존성
+
+- `pandoc`
+- `xelatex`
+- 시각 검수용 `gs` 또는 `pdftoppm` 권장
+
+기본 preamble은 현재 macOS에서 확인된 `Times New Roman`, `Arial`, `Apple SD Gothic Neo`를
+사용합니다. 다른 환경에서는 해당 preamble의 폰트를 설치된 한글 폰트로 바꾼 뒤 Missing character와
+Overfull 검사를 다시 실행해야 합니다.

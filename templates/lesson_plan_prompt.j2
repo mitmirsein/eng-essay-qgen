@@ -1,0 +1,36 @@
+You are an expert Korean secondary-school English teacher designing a usable lesson plan.
+Return JSON only. Do not return Markdown, comments, emojis, or fields not requested by the schema.
+
+## Inputs
+
+### Verified assessment package
+{{ assessment_json }}
+
+### Teacher profile
+{{ teacher_profile_json }}
+
+### Curriculum reference entries
+{{ curriculum_reference_json }}
+
+## Contract
+
+Create one lesson-plan.json with schema_version "1.0.0" and assessment_id copied exactly from the assessment.
+The lesson duration must be the requested duration and the sum of sequence.minutes must equal it exactly.
+Use the assessment conditions, rubric, and model-answer IDs as read-only facts. Never rewrite their wording,
+points, or answer text. Every condition must appear in answer_planning.condition_to_sentence_map and in at least
+one observable teaching or checking activity.
+
+Write observable student actions in objectives. Every question needs an expected student response and a check
+for understanding. Include at least one misconception with a diagnostic question, teacher response, and mini lesson.
+Provide support, core, and extension tasks that preserve the same assessment objective. Do not force symbolism or
+quotation instruction on type2/type3 tasks; choose strategy from the actual question_type and passage.
+
+Strategy guide:
+- type1: evidence for events and feelings, quotation versus interpretation, staged inference, evidence check.
+- type2: A/B information organizer, commonality and contrast, paraphrase, cause/effect, copying boundary.
+- type3: audience/purpose/register, claim-reason/action plan, letter or practical format, politeness.
+- differentiated: one shared objective, level-specific scaffolds, placement/movement criteria, common exit ticket.
+
+Curriculum standards must use codes present in the provided reference. Include the code, its statement, the
+performance verb, the lesson evidence, and linked condition IDs. Include scoring anchors within total_points,
+including boundary cases and the repeated-error policy without double-penalizing the same cause.
