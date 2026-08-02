@@ -1,0 +1,4 @@
+interface:
+  display_name: "Essay Coach"
+  short_description: "중고등 영어 글의 진단, 첨삭, 단계별 수정 지도"
+  default_prompt: "Use $slash-essay-coach to analyze my English draft and guide a level-appropriate revision."

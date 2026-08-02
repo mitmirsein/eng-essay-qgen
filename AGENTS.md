@@ -13,7 +13,8 @@ This file defines the project-specific rules for the `eng-essay-qgen` workspace.
 3. **Format Security (`/essay-review`)**: 학생용 문제지 본문에는 절대로 '모범 답안(Sample Answer)'이 포함되어서는 안 됩니다. 리뷰 스킬이 이를 적발하면 검수를 Fail 처리하고 즉시 수정해야 합니다.
 4. **Teacher Guide (`/lesson-plan`)**: 교사용 지도안에만 모범 답안과 수업 지도 전략이 포함됩니다.
 5. **Automated Grading (`/essay-grade`)**: 텍스트 및 이미지(학생 손글씨) 답안지 일괄 채점 파이프라인입니다. **VLM 추출 시 반드시 Human-in-the-loop(HITL) 검수를 거쳐야 합니다.** 인식 오류가 억울한 감점으로 이어지는 것을 방지하기 위함입니다.
-6. **PDF Rendering**: `tools/exam-pdf/make_exam_pdf.py`를 호출하여 최종 마크다운을 2단 시험지 형태의 PDF로 컴파일합니다. (부제목에는 학년 정보가 동적으로 기입됩니다.)
+6. **Formative Writing Coach (`/essay-coach`)**: 학생의 영어 초안을 점수 없이 분석하고, 오류 근거와 최소 수정본, 발전 수정본, 재작성 연습을 제공합니다. 이미지 답안은 `/essay-grade`와 동일하게 VLM 추출 후 반드시 HITL 검수를 거쳐야 합니다.
+7. **PDF Rendering**: `tools/exam-pdf/make_exam_pdf.py`를 호출하여 최종 마크다운을 2단 시험지 형태의 PDF로 컴파일합니다. (부제목에는 학년 정보가 동적으로 기입됩니다.)
 
 ## Development Guidelines
 - **Prompt Modifications**: `question_prompt.j2` 수정 시, 반드시 '적응형(Adaptive)' 로직을 보존해야 합니다. 정형화된 조건으로 퇴행시키지 마십시오.
